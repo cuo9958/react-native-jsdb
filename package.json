@@ -1,0 +1,19 @@
+{
+  "name": "react-native-jsdb",
+  "version": "1.0.0",
+  "description": "javascript database",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "parcel src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cuo9958/react-native-jsdb.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cuo9958/react-native-jsdb/issues"
+  },
+  "homepage": "https://github.com/cuo9958/react-native-jsdb#readme"
+}
