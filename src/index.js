@@ -32,6 +32,9 @@ export default class JSDB {
     //读,临时存储
     cacheList = new Map();
     cacheKeyList = [];
+    //写入的列表
+    writeList = new Map();
+    backWriteList = new Map();
 
     /**
      * 初始化索引
@@ -48,8 +51,21 @@ export default class JSDB {
     async add(data = {}) {
         if (data.constructor !== Object) return;
         data._id = uuid();
-        await setItem(this.tableKey + "_" + data._id, data);
+        const key = this.tableKey + "_" + data._id
+        this.writeList.set(key, data);
+        this.write();
         return data;
+    }
+    //写入的实现,now立马写入
+    write(now = false) {
+        if (now || this.writeList.size > 20) {
+            let tmp = this.writeList;
+            this.writeList = this.backWriteList;
+            this.backWriteList = tmp;
+            this.backWriteList.forEach((v, k) => {
+                setItem(k, v);
+            })
+        }
     }
     /**
      * 通过id查询
