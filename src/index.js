@@ -122,4 +122,28 @@ export default class JSDB {
     }
 }
 
-
+class Pool {
+    list = [];
+    //创建对象/使用旧对象
+    create(tableName, db) {
+        let list = this.list.filter(item => item.state = 0);
+        if (list.length === 0) {
+            let jsdb = {
+                id: this.list.length,
+                data: new JSDB(tableName, db),
+                state: 0
+            };
+            jsdb.data.disable = this.disable(jsdb.id);
+            this.list.push(jsdb)
+            return jsdb.data;
+        }
+        let tmp = list[0];
+        tmp.state = 1;
+        return tmp.data;
+    }
+    //状态修改
+    disable(id) {
+        this.list[id].state = 0;
+    }
+}
+exports.pool = new Pool();
