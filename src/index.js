@@ -29,6 +29,9 @@ export default class JSDB {
     //表名
     tableName = "";
     tableKey = "";
+    //读,临时存储
+    cacheList = new Map();
+    cacheKeyList = [];
 
     /**
      * 初始化索引
@@ -54,7 +57,21 @@ export default class JSDB {
      */
     async getById(id) {
         if (!id) return {};
-        return await getItem(this.tableKey + "_" + id);
+        id = this.tableKey + "_" + id;
+        //如果有缓存
+        if (this.cacheList.has(id)) {
+            let tmp = this.cacheList.get(id);
+            //如果过量了
+            if (this.cacheKeyList.length > 20) {
+                this.cacheKeyList.push(id);
+                let k = this.cacheKeyList.shift();
+                this.cacheList.delete(k);
+            }
+            return tmp;
+        }
+        this.cacheKeyList.push(id);
+        this.cacheList.set(tmp);
+        return await getItem(id);
     }
     /**
      * 通过过滤方法查询
